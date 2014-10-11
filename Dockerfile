@@ -11,7 +11,7 @@ RUN wget http://dlc.sun.com.edgesuite.net/glassfish/4.1/release/glassfish-4.1.zi
 	mv /glassfish4 /glassfish && \
 	rm glassfish-4*zip
 
-RUN echo "export GF_HOME=/glassfish; PATH=$GF_HOME:$PATH;" >> ~/.bashrc
+RUN echo 'export GF_HOME=/glassfish; PATH=$GF_HOME/bin:$PATH;' >> ~/.bashrc
 ENV PATH /glassfish/bin:$PATH
 
 RUN asadmin start-domain && expect -c 'spawn asadmin --user admin change-admin-password;expect "password";send "\n";expect "password";send "password\n";expect "password";send "password\n";expect eof;spawn asadmin enable-secure-admin;expect "admin";send "admin\n";expect "password";send "password\n";expect eof;exit'
@@ -19,4 +19,4 @@ RUN apt-get purge -y --auto-remove wget unzip expect
 
 EXPOSE 4848 8080 8181
 
-CMD /glassfish/bin/asadmin start-domain && tail -f /glassfish/glassfish/domains/domain1/logs/server.log
+CMD /glassfish/bin/asadmin start-domain -w
